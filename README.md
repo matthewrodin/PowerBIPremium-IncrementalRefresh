@@ -697,7 +697,7 @@ A “Success” notification should now be visible
 
 * [Incremental Refresh with Power BI](https://docs.microsoft.com/en-us/power-bi/service-premium-incremental-refresh)
 
-* [Christian Wade (Power BI Program Manager at Microsoft) Discusses Incremental Refresh in POwer BI Premium](https://www.youtube.com/watch?v=CajQjq70Kpg)
+* [Christian Wade (Power BI Program Manager at Microsoft) Discusses Incremental Refresh in Power BI Premium](https://www.youtube.com/watch?v=CajQjq70Kpg)
 
 
 
