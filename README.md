@@ -484,7 +484,7 @@ A diamond should now appear next to the newly created workspace, indicating it i
 
 ##  Task 9: Create Data Model
 
-1.	Open **Power BI Desktop**. 
+1.	Open **Power BI Desktop**. </br>
 If Power BI Desktop is not currently installed, it can be using the following link: [PowerBI](https://powerbi.microsoft.com/en-us/downloads/)
 
 2.	Click “Get data”
@@ -502,7 +502,7 @@ If Power BI Desktop is not currently installed, it can be using the following li
 6.	Click “Ok”
 
 7.	Double-click the model name and tick both tables
-</br><img src="./Pictures/pbi32.png" width="350">
+</br><img src="./Pictures/pbi32.png" width="450">
 
 8.	Click “Load”
 
@@ -515,10 +515,183 @@ On the right, the two tables should now be visible:
 9.	Click the “Model” icon
 </br><img src="./Pictures/pbi34.png" width="150">
 
-	a. **Note:** Power BI should have predicted the intended model relationship as a 1-to-many between the two imported tables.
+	**Note:** Power BI should have predicted the intended model relationship as a 1-to-many between the two imported tables.
 	If this is not the case, click and drag the “CustomerKey” column from the “DimCustomer” table onto the “CustomerKey” column of the “FactSales” table and release the mouse.
+	</br><img src="./Pictures/pbi35.png" width="350">
 
 10.	In order to create a report/dashboard with visualizations, return to the “report” view of Power BI.
-</br><img src="./Pictures/pbi35.png" width="350">
+</br><img src="./Pictures/pbi36.png" width="350">
 
 11.	Save the Power BI file (.pbix)
+
+</br>
+
+##  Task 10: Implement Incremental Refresh
+
+### Part 1: Enable Incremental Refresh
+
+1.	Open the Power BI file created in Task 9 in Power BI Desktop
+
+2.	Under “File”, click “Options and settings” and then click “Options”
+</br><img src="./Pictures/pbi37.png" width="350">
+
+3.	Under “Preview features”, ensure that “Incremental Refresh Policies” is ticked.
+</br><img src="./Pictures/pbi38.png" width="350">
+
+4.	Click “Ok”
+
+### Part 2: Create Parameters
+
+For incremental refresh, datasets are filtered by using Power Query date/time parameters with the reserved, case-sensitive names **RangeStart** and **RangeEnd**. These parameters are used to filter the data imported into Power BI Desktop, and also to dynamically partition the data into ranges once published to the Power BI service. __The parameter values are substituted by the service to filter for each partition. There's no need to set them in dataset settings in the service.__ Once published, the parameter values are overridden automatically by the Power BI service.
+
+1.	Open the Power BI file created in Task 9 in Power BI Desktop
+
+2.	Click “Edit Queries” to open Power Query Editor
+</br><img src="./Pictures/pbi39.png" width="350">
+
+3.	Click “Manage Parameters”
+</br><img src="./Pictures/pbi40.png" width="350">
+
+4.	Click “New”
+</br><img src="./Pictures/pbi41.png" width="350">
+
+	a.	Under “Name”, enter “RangeEnd”
+
+	b.	Untick “Required”
+
+	c.	Under “Type”, choose “Date/Time”
+
+	d.	Under “Suggested Values”, choose “Any value”
+
+	e.	Under “Current Value”, enter the 1st of the of the current month, in the following format: mm/dd/yyyy hh:mm:ss AM/PM
+
+	f.	Click “Ok”
+	</br><img src="./Pictures/pbi42.png" width="350">
+
+5.	Repeat Step 4 for the “RangeStart” parameter and by changing the “Current Value” with the 1st of last month
+</br><img src="./Pictures/pbi43.png" width="350">
+
+### Part 3: Apply Filter
+
+1.	While still inside the Power Query Editor from Task 10, Step 2, click the Open the Power BI file created in Task 9 in Power BI Desktop
+
+2.	Click on the “FactSales” table
+</br><img src="./Pictures/pbi44.png" width="350">
+
+3.	Hold the Ctrl key on the keyboard and this the “Year”, “Month” and “Day” columns. Release the Ctrl key. 
+
+4.	Under “Transform”, click “Merge Columns”
+</br><img src="./Pictures/pbi45.png" width="350">
+
+	a.	Under “Separator”, select “--Custom--”
+
+	b.	In the empty text box, type “/” as the custom separator
+
+	c.	Under “New column name (optional)”, enter “SalesDate”
+
+5.	Select the newly merged “SalesDate” column
+
+6.	Under “Transform”, under “Data Type”, select “Date/Time”
+</br><img src="./Pictures/pbi46.png" width="350">
+
+7.	Click the downwards arrow on the “SalesDate” column
+</br><img src="./Pictures/pbi47.png" width="350">
+
+8.	Under “Date/Time Filters”, select “Custom Filter…”
+</br><img src="./Pictures/pbi48.png" width="350">
+
+9.	Enter the following configuration
+</br><img src="./Pictures/pbi49.png" width="350">
+
+10.	Click “Ok”
+
+11.	Click “Close & Apply”
+</br><img src="./Pictures/pbi50.png" width="350">
+
+### Part 4: Define Incremental Refresh Policy
+
+1.	Open the Power BI file created in Task 9 in Power BI Desktop
+
+2.	Right click the ellipses on the “FactSales” table and click “Incremental Refresh”
+</br><img src="./Pictures/pbi51.png" width="350">
+
+3.	Under “Table”, select “FactSales”
+
+4.	Make sure “Incremental refresh” is turned on 
+
+**Note:** It's important the partition filters are pushed to the source system when queries are submitted for refresh operations. To push filtering down means the datasource should support query folding. Most data sources that support SQL queries support query folding. However, data sources like flat files, blobs, web, and OData feeds typically do not. In cases where the filter is not supported by the datasource back-end, it cannot be pushed down. In such cases, the mashup engine compensates and applies the filter locally, which may require retrieving the full dataset from the data source. This can cause incremental refresh to be very slow, and the process can run out of resources either in the Power BI service or in the on-premises data gateway if used.
+Given the various levels of query folding support for each datasource, it's recommended that verification is performed to ensure the filter logic is included in the source queries. To make this easier, Power BI Desktop attempts to perform this verification for you. If unable to verify, a warning is displayed in the incremental refresh dialog when defining the incremental refresh policy. SQL based data sources such as SQL, Oracle, and Teradata can rely on this warning. Other data sources may be unable to verify without tracing queries. If Power BI Desktop is unable to confirm, the following warning is displayed:
+</br><img src="./Pictures/pbi52.png" width="350">
+
+5.	Complete the configuration as follows:
+</br><img src="./Pictures/pbi53.png" width="350">
+
+	The above example defines a refresh policy to store data for seven full calendar months plus data for the current month up to the current date, and incrementally refresh twenty days of data. The first refresh operation loads historical data. 
+
+	Subsequent refreshes are incremental, and (if scheduled to run daily) perform the following operations:
+
+* Add a new day of data.
+
+* Refresh twenty days up to the current date.
+
+* Remove calendar months that are older than seven months prior to the current date. For example, if the current date is January 1st, 2020, any data before June 1st, 2019 is removed.
+
+	The first refresh in the Power BI service may take longer to import all seven full calendar months. Subsequent refreshes may be finished in a fraction of the time.
+
+6.	(Optional) Detect data changes
+Incremental refresh of twenty days is more efficient than full refresh of seven months. However, it's possible to do even better. If you select the “Detect data changes” checkbox, you can select a date/time column used to identify and refresh only the days where the data has changed. This assumes such a column exists in the source system, which is typically for auditing purposes. **This should not be the same column used to partition the data with the RangeStart/RangeEnd parameters.** The maximum value of this column is evaluated for each of the periods in the incremental range. If it has not changed since the last refresh, there is no need to refresh the period. 
+
+7.	(Optional) Only refresh complete days
+For example, if one is refreshing data from a financial system where data for the previous month is approved on the 12th calendar day of the month. One could set the incremental range to 1 month and schedule the refresh to run on the 12th day of the month. With this option checked, it would for example refresh January data on February 12th.
+
+</br>
+
+##  Task 11: Deploy Model to Power BI Premium
+
+1.	Open the Power BI file created in Task 9 in Power BI Desktop
+
+2.	Click “Publish”
+</br><img src="./Pictures/pbi53.png" width="350">
+
+3.	Select the workplace created in Task 8
+
+4.	Click “Select”
+
+A “Success” notification should now be visible
+</br><img src="./Pictures/pbi54.png" width="350">
+
+5.	Click “Open xxxx.pbix in Power BI” to view the report in Power BI Service.
+
+6.	If the following error is received
+</br><img src="./Pictures/pbi55.png" width="350">
+
+	a.	Under “Workspaces”, click on the workspace created in Task 8.
+
+	b.	Navigate to “Datasets”
+	</br><img src="./Pictures/pbi56.png" width="350">
+
+	c.	Click on the ellipses
+	</br><img src="./Pictures/pbi57.png" width="350">
+
+	d.	Click “Settings”
+	</br><img src="./Pictures/pbi58.png" width="350">
+
+	e.	Click “Edit credentials”
+	</br><img src="./Pictures/pbi59.png" width="350">
+
+		i.   Under “Authentication method”, choose “Basic”
+
+		ii.  Under “User Name”, enter the user “Server Admin Login” chosen for the server in Task 2
+
+		iii. Under “Password", enter the user “Password” chosen for the server in Task 2
+
+		iv.  Under “Privacy level setting for this data source”, choose “None”
+
+		v.   Click “Sign in”
+
+
+
+
+
+
+
