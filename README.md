@@ -520,7 +520,7 @@ On the right, the two tables should now be visible:
 	</br><img src="./Pictures/pbi35.png" width="350">
 
 10.	In order to create a report/dashboard with visualizations, return to the “report” view of Power BI.
-</br><img src="./Pictures/pbi36.png" width="350">
+</br><img src="./Pictures/pbi36.png" width="150">
 
 11.	Save the Power BI file (.pbix)
 
@@ -536,7 +536,7 @@ On the right, the two tables should now be visible:
 </br><img src="./Pictures/pbi37.png" width="350">
 
 3.	Under “Preview features”, ensure that “Incremental Refresh Policies” is ticked.
-</br><img src="./Pictures/pbi38.png" width="350">
+</br><img src="./Pictures/pbi38.png" width="400">
 
 4.	Click “Ok”
 
@@ -581,7 +581,7 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 3.	Hold the Ctrl key on the keyboard and this the “Year”, “Month” and “Day” columns. Release the Ctrl key. 
 
 4.	Under “Transform”, click “Merge Columns”
-</br><img src="./Pictures/pbi45.png" width="350">
+</br><img src="./Pictures/pbi45.png" width="650">
 
 	a.	Under “Separator”, select “--Custom--”
 
@@ -592,49 +592,49 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 5.	Select the newly merged “SalesDate” column
 
 6.	Under “Transform”, under “Data Type”, select “Date/Time”
-</br><img src="./Pictures/pbi46.png" width="350">
+</br><img src="./Pictures/pbi46.png" width="650">
 
 7.	Click the downwards arrow on the “SalesDate” column
-</br><img src="./Pictures/pbi47.png" width="350">
+</br><img src="./Pictures/pbi47.png" width="150">
 
 8.	Under “Date/Time Filters”, select “Custom Filter…”
 </br><img src="./Pictures/pbi48.png" width="350">
 
 9.	Enter the following configuration
-</br><img src="./Pictures/pbi49.png" width="350">
+</br><img src="./Pictures/pbi49.png" width="400">
 
 10.	Click “Ok”
 
 11.	Click “Close & Apply”
-</br><img src="./Pictures/pbi50.png" width="350">
+</br><img src="./Pictures/pbi50.png" width="250">
 
 ### Part 4: Define Incremental Refresh Policy
 
 1.	Open the Power BI file created in Task 9 in Power BI Desktop
 
 2.	Right click the ellipses on the “FactSales” table and click “Incremental Refresh”
-</br><img src="./Pictures/pbi51.png" width="350">
+</br><img src="./Pictures/pbi51.png" width="200">
 
 3.	Under “Table”, select “FactSales”
 
 4.	Make sure “Incremental refresh” is turned on 
 
 **Note:** It's important the partition filters are pushed to the source system when queries are submitted for refresh operations. To push filtering down means the datasource should support query folding. Most data sources that support SQL queries support query folding. However, data sources like flat files, blobs, web, and OData feeds typically do not. In cases where the filter is not supported by the datasource back-end, it cannot be pushed down. In such cases, the mashup engine compensates and applies the filter locally, which may require retrieving the full dataset from the data source. This can cause incremental refresh to be very slow, and the process can run out of resources either in the Power BI service or in the on-premises data gateway if used.
-Given the various levels of query folding support for each datasource, it's recommended that verification is performed to ensure the filter logic is included in the source queries. To make this easier, Power BI Desktop attempts to perform this verification for you. If unable to verify, a warning is displayed in the incremental refresh dialog when defining the incremental refresh policy. SQL based data sources such as SQL, Oracle, and Teradata can rely on this warning. Other data sources may be unable to verify without tracing queries. If Power BI Desktop is unable to confirm, the following warning is displayed:
-</br><img src="./Pictures/pbi52.png" width="350">
+Given the various levels of query folding support for each datasource, it's recommended that verification is performed to ensure the filter logic is included in the source queries. To make this easier, Power BI Desktop attempts to perform this verification for you. If unable to verify, a warning is displayed in the incremental refresh dialog when defining the incremental refresh policy. SQL based data sources such as SQL, Oracle, and Teradata can rely on this warning. Other data sources may be unable to verify without tracing queries. If Power BI Desktop is unable to confirm, the following warning is displayed: </br>
+</br><img src="./Pictures/pbi52.png" width="500">
 
 5.	Complete the configuration as follows:
-</br><img src="./Pictures/pbi53.png" width="350">
+</br><img src="./Pictures/pbi53.png" width="300">
 
 	The above example defines a refresh policy to store data for seven full calendar months plus data for the current month up to the current date, and incrementally refresh twenty days of data. The first refresh operation loads historical data. 
 
 	Subsequent refreshes are incremental, and (if scheduled to run daily) perform the following operations:
 
-* Add a new day of data.
+	* Add a new day of data.
 
-* Refresh twenty days up to the current date.
+	* Refresh twenty days up to the current date.
 
-* Remove calendar months that are older than seven months prior to the current date. For example, if the current date is January 1st, 2020, any data before June 1st, 2019 is removed.
+	* Remove calendar months that are older than seven months prior to the current date. For example, if the current date is January 1st, 2020, any data before June 1st, 2019 is removed.
 
 	The first refresh in the Power BI service may take longer to import all seven full calendar months. Subsequent refreshes may be finished in a fraction of the time.
 
@@ -651,33 +651,33 @@ For example, if one is refreshing data from a financial system where data for th
 1.	Open the Power BI file created in Task 9 in Power BI Desktop
 
 2.	Click “Publish”
-</br><img src="./Pictures/pbi53.png" width="350">
+</br><img src="./Pictures/pbi54.png" width="350">
 
 3.	Select the workplace created in Task 8
 
 4.	Click “Select”
 
 A “Success” notification should now be visible
-</br><img src="./Pictures/pbi54.png" width="350">
+</br><img src="./Pictures/pbi55.png" width="350">
 
 5.	Click “Open xxxx.pbix in Power BI” to view the report in Power BI Service.
 
 6.	If the following error is received
-</br><img src="./Pictures/pbi55.png" width="350">
+</br><img src="./Pictures/pbi56.png" width="350">
 
 	a.	Under “Workspaces”, click on the workspace created in Task 8.
 
 	b.	Navigate to “Datasets”
-	</br><img src="./Pictures/pbi56.png" width="350">
-
-	c.	Click on the ellipses
 	</br><img src="./Pictures/pbi57.png" width="350">
 
-	d.	Click “Settings”
+	c.	Click on the ellipses
 	</br><img src="./Pictures/pbi58.png" width="350">
 
-	e.	Click “Edit credentials”
+	d.	Click “Settings”
 	</br><img src="./Pictures/pbi59.png" width="350">
+
+	e.	Click “Edit credentials”
+	</br><img src="./Pictures/pbi60.png" width="350">
 
 		i.   Under “Authentication method”, choose “Basic”
 
