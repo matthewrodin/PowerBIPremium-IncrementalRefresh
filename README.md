@@ -442,8 +442,7 @@ Repeat Steps 1 to 13 of Task 6 for “SampleSalesData2.csv”.
     e.	Click “Connect”
 
 </br>
-In the “Object Explorer” pane, under 
-
+In the “Object Explorer” pane, under </br>
 
 *ServerName.database.windows.net -> "Databases" -> SQLDataWarehouseName -> "Tables"*
 
