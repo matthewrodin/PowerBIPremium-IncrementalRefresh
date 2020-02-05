@@ -471,20 +471,21 @@ the two tables created in Task 3 should appear.
 	b.	Click “Advanced”
 
 	c.	Ensure that “Dedicated capacity” is turned On.
-	</br><img src="./Pictures/pbi28.png" width="250">
+	</br><img src="./Pictures/pbi28.png" width="350">
 
 	d.	Choose an available dedicated capacity for this new workspace
 
 	e.	Click “Save”
 
 A diamond should now appear next to the newly created workspace, indicating it is a premium workspace.
-</br><img src="./Pictures/pbi29.png" width="250">
+</br><img src="./Pictures/pbi29.png" width="350">
 
 </br>
 
 ##  Task 9: Create Data Model
 
-1.	Open **Power BI Desktop**. If Power BI Desktop is not currently installed, it can be using the following link: [PowerBI](https://powerbi.microsoft.com/en-us/downloads/)
+1.	Open **Power BI Desktop**. 
+If Power BI Desktop is not currently installed, it can be using the following link: [PowerBI](https://powerbi.microsoft.com/en-us/downloads/)
 
 2.	Click “Get data”
 </br><img src="./Pictures/pbi30.png" width="250">
@@ -492,7 +493,7 @@ A diamond should now appear next to the newly created workspace, indicating it i
 3.	Under “Azure” -> Click “Azure SQL Data Warehouse”
 
 	a.	Click “Connect”
-	</br><img src="./Pictures/pbi31.png" width="250">
+	</br><img src="./Pictures/pbi31.png" width="350">
 
 4.	Under “Server” -> Enter the name of the SQL Data Warehouse server name created in Task 2.
 
@@ -501,7 +502,7 @@ A diamond should now appear next to the newly created workspace, indicating it i
 6.	Click “Ok”
 
 7.	Double-click the model name and tick both tables
-</br><img src="./Pictures/pbi32.png" width="250">
+</br><img src="./Pictures/pbi32.png" width="350">
 
 8.	Click “Load”
 
@@ -509,15 +510,15 @@ A diamond should now appear next to the newly created workspace, indicating it i
 In the case of large datasets, in order to filter the tables upon import, click “Transform Data” in Step 7 (instead of “Load”)
 
 On the right, the two tables should now be visible:
-</br><img src="./Pictures/pbi33.png" width="250">
+</br><img src="./Pictures/pbi33.png" width="150">
 
 9.	Click the “Model” icon
-</br><img src="./Pictures/pbi34.png" width="250">
+</br><img src="./Pictures/pbi34.png" width="150">
 
-* **Note:** Power BI should have predicted the intended model relationship as a 1-to-many between the two imported tables.
+	a. **Note:** Power BI should have predicted the intended model relationship as a 1-to-many between the two imported tables.
 	If this is not the case, click and drag the “CustomerKey” column from the “DimCustomer” table onto the “CustomerKey” column of the “FactSales” table and release the mouse.
 
 10.	In order to create a report/dashboard with visualizations, return to the “report” view of Power BI.
-</br><img src="./Pictures/pbi35.png" width="250">
+</br><img src="./Pictures/pbi35.png" width="350">
 
 11.	Save the Power BI file (.pbix)
