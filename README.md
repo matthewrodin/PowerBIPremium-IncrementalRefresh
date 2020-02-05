@@ -442,10 +442,8 @@ Repeat Steps 1 to 13 of Task 6 for “SampleSalesData2.csv”.
     e.	Click “Connect”
 
 </br>
-In the “Object Explorer” pane, under </br>
-
+In the “Object Explorer” pane, under
 *ServerName.database.windows.net -> "Databases" -> SQLDataWarehouseName -> "Tables"*
-
 the two tables created in Task 3 should appear.
 </br><img src="./Pictures/pbi26.png" width="250">
 
