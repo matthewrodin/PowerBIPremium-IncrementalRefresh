@@ -663,21 +663,21 @@ A “Success” notification should now be visible
 5.	Click “Open xxxx.pbix in Power BI” to view the report in Power BI Service.
 
 6.	If the following error is received
-</br><img src="./Pictures/pbi56.png" width="350">
+</br><img src="./Pictures/pbi56.png" width="500">
 
 	a.	Under “Workspaces”, click on the workspace created in Task 8.
 
 	b.	Navigate to “Datasets”
-	</br><img src="./Pictures/pbi57.png" width="350">
+	</br><img src="./Pictures/pbi57.png" width="500">
 
 	c.	Click on the ellipses
-	</br><img src="./Pictures/pbi58.png" width="350">
+	</br><img src="./Pictures/pbi58.png" width="500">
 
 	d.	Click “Settings”
-	</br><img src="./Pictures/pbi59.png" width="350">
+	</br><img src="./Pictures/pbi59.png" width="150">
 
 	e.	Click “Edit credentials”
-	</br><img src="./Pictures/pbi60.png" width="350">
+	</br><img src="./Pictures/pbi60.png" width="500">
 
 		i.   Under “Authentication method”, choose “Basic”
 
@@ -689,6 +689,15 @@ A “Success” notification should now be visible
 
 		v.   Click “Sign in”
 
+</br>
+
+##  Resources
+
+* [Power BI Premium](https://docs.microsoft.com/en-us/power-bi/service-premium-what-is)
+
+* [Incremental Refresh with Power BI](https://docs.microsoft.com/en-us/power-bi/service-premium-incremental-refresh)
+
+* [Christian Wade (Power BI Program Manager at Microsoft) Discusses Incremental Refresh in POwer BI Premium](https://www.youtube.com/watch?v=CajQjq70Kpg)
 
 
 
