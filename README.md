@@ -7,11 +7,11 @@ In this article, we will explore how to implement incremental refresh to a Power
 ### What is incremental refresh?
 Incremental refresh enables very large datasets in the Power BI Premium service with the following benefits:
 
-	* Refreshes are faster - Only data that has changed needs to be refreshed. For example, refresh only the last five days of a ten-year dataset.
+* Refreshes are faster - Only data that has changed needs to be refreshed. For example, refresh only the last five days of a ten-year dataset.
 
-	* Refreshes are more reliable - It's no longer necessary to maintain long-running connections to volatile source systems.
+* Refreshes are more reliable - It's no longer necessary to maintain long-running connections to volatile source systems.
 
-	* Resource consumption is reduced - Less data to refresh reduces overall consumption of memory and other resources.
+* Resource consumption is reduced - Less data to refresh reduces overall consumption of memory and other resources.
 
 Essentially, setting up the incremental refresh in Power BI means loading only part of the data on a regular basis, and storing the consistent data. This process will make your refresh time much faster!
 
@@ -37,7 +37,7 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
     * Blob storage is optimized for storing massive amounts of unstructured data.
     
     * Blob storage offers three types of resources:
-    </br><img src="./Pictures/aas0_1.png" width="300">
+    </br><img src="./Pictures/pbi1.png" width="300">
 </br>
  
 * **Azure Data Factory** (To ingest data from raw file to Azure SQL Data Warehouse)
@@ -68,6 +68,7 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
 	* Provides dedicated and enhanced resources to run the Power BI service for your organization
 	
 	* With Power BI Premium, you get dedicated capacities. In contrast to a shared capacity where workloads run on computational resources shared with other customers, a dedicated capacity is for exclusive use by an organization. It's isolated with dedicated computational resources, which provide dependable and consistent performance for hosted content.
+</br>
 
 ##  Task 1: Download Sample Data
 
@@ -82,10 +83,10 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
 1.  Navigate to: [Azure Portal](https://portal.azure.com/)
 
 2.  In the search bar, type “sql” and select “SQL data warehouses
-</br><img src="./Pictures/pbi1.png" width="400">
+</br><img src="./Pictures/pbi2.png" width="400">
 
 3.  On the top left, click “+ Add”
-</br><img src="./Pictures/pbi2.png" width="400">
+</br><img src="./Pictures/pbi3.png" width="400">
 
     a.  Under “Subscription” -> Select existing Azure subscription 
     
@@ -138,12 +139,12 @@ Deployment may take up to 20 minutes.
 	b.	Navigate to portal.azure.com
 
 	c.	In the search bar, type “sql server” and select “SQL servers”
-    </br><img src="./Pictures/pbi3.png" width="400">
+    </br><img src="./Pictures/pbi4.png" width="400">
 
 	d.	Select the server created in Task 2
 
 	e.	Select “Firewalls and virtual networks”
-    </br><img src="./Pictures/pbi4.png" width="200">
+    </br><img src="./Pictures/pbi5.png" width="200">
     
         i.   Under “Allow Azure services and resources to access this server” -> Click “On”
         
@@ -152,7 +153,7 @@ Deployment may take up to 20 minutes.
         iii. Under Start IP -> Paste the copied IP Address
         
         iv.  Under End IP -> Paste the copied IP Address
-    </br><img src="./Pictures/pbi5.png" width="400">
+    </br><img src="./Pictures/pbi6.png" width="400">
     
     f.	Click “Save”
 
@@ -205,10 +206,10 @@ Deployment may take up to 20 minutes.
 1.	Navigate to [Azure Portal](https://portal.azure.com/)
 
 2.	In the search bar, type “storage” and select “Storage accounts”
-</br><img src="./Pictures/pbi6.png" width="250">
+</br><img src="./Pictures/pbi7.png" width="250">
 
 3.	Click “+ Add”
-</br><img src="./Pictures/pbi7.png" width="250">
+</br><img src="./Pictures/pbi8.png" width="250">
 
     a.	Under “Subscription” -> Select existing Azure subscription
     
@@ -237,28 +238,28 @@ Deployment may take up to 20 minutes.
 4.	Click “Go to Resource”
 
 5.	Under “Blob service” -> Click “Containers”
-</br><img src="./Pictures/pbi8.png" width="200">
+</br><img src="./Pictures/pbi9.png" width="200">
 
 6.	Click “+ Container”
-</br><img src="./Pictures/pbi9.png" width="350">
+</br><img src="./Pictures/pbi10.png" width="350">
 
     a.	Under “Name” -> Enter a name for the container
     
     b.	Under “Public access level” -> Select “Blob (anonymous read access for blobs only)”
     
 7.	Select “Storage Explorer”
-</br><img src="./Pictures/pbi10.png" width="200">
+</br><img src="./Pictures/pbi11.png" width="200">
 
 8.	Click on “BLOB CONTAINERS”
-</br><img src="./Pictures/pbi11.png" width="250">
+</br><img src="./Pictures/pbi12.png" width="250">
 
 9.	Click on the container that was just created
 
 10.	Click “Upload”
-</br><img src="./Pictures/pbi12.png" width="400">
+</br><img src="./Pictures/pbi13.png" width="400">
 
 11.	Click the blue browse button and upload the local copies of “SampleCustomerData.csv” and “SampleSalesData.csv” to the container. 
-</br><img src="./Pictures/pbi13.png" width="300">
+</br><img src="./Pictures/pbi14.png" width="300">
 
 12.	Leave “Overwrite if files already exist” blank
 
@@ -271,10 +272,10 @@ Deployment may take up to 20 minutes.
 1.	Navigate to [Azure Portal](https://portal.azure.com/)
 
 2.	In the search bar, type “data factory” and select “SQL data warehouses”
-</br><img src="./Pictures/pbi14.png" width="200">
+</br><img src="./Pictures/pbi15.png" width="200">
 
 3.	Click “+ Add”
-</br><img src="./Pictures/pbi15.png" width="300">
+</br><img src="./Pictures/pbi16.png" width="300">
 
     a.	Under “Name” -> Enter a name for the data factory
     
@@ -305,10 +306,10 @@ Deployment may take up to 20 minutes.
 5.	Click “Continue”
 
 6.	Click the Home icon
-</br><img src="./Pictures/pbi16.png" width="250">
+</br><img src="./Pictures/pbi17.png" width="250">
 
 7.	Click “Copy data”
-</br><img src="./Pictures/pbi17.png" width="400">
+</br><img src="./Pictures/pbi18.png" width="400">
 
 8.	Under “Properties”
 
@@ -323,12 +324,12 @@ Deployment may take up to 20 minutes.
     a.	Select “Azure”
     
     b.	Select “+ Create new connection”
-    </br><img src="./Pictures/pbi18.png" width="400">
+    </br><img src="./Pictures/pbi19.png" width="400">
     
     c.	Select “Azure Blob Storage”
     
     d.	Click “Continue"
-    </br><img src="./Pictures/pbi19.png" width="400">
+    </br><img src="./Pictures/pbi20.png" width="400">
     
     e.	Under “Name” -> Enter a name for the connection
     
@@ -367,7 +368,7 @@ Deployment may take up to 20 minutes.
     c.	Select “Azure Synapse Analytics (formerly SQL DW)”
 
     d.	Click “Continue”
-    </br><img src="./Pictures/pbi20.png" width="400">
+    </br><img src="./Pictures/pbi21.png" width="400">
     
     e.	Under “Name” -> Enter a name for the connection
     
@@ -392,12 +393,12 @@ Deployment may take up to 20 minutes.
     f.	Click “Next”
     
     g.	In the dropdown, select “dbo.DimCustomer”
-    </br><img src="./Pictures/pbi21.png" width="450">
+    </br><img src="./Pictures/pbi22.png" width="450">
     
     h.	Click “Next”
     
     i.	Alter the source types in order to match the destination. The column mapping should look like this:
-    </br><img src="./Pictures/pbi22.png" width="550">
+    </br><img src="./Pictures/pbi23.png" width="550">
     
     j.	Click “Next”
     
@@ -417,7 +418,7 @@ Repeat Steps 1 to 13 of Task 6 for “SampleSalesData2.csv”.
 * In Step 10g, select “dbo.FactSales”
 
 * In Step 10i, the mapping should match the following:
-</br><img src="./Pictures/pbi23.png" width="550">
+</br><img src="./Pictures/pbi24.png" width="550">
 
 </br>
 
@@ -428,7 +429,7 @@ Repeat Steps 1 to 13 of Task 6 for “SampleSalesData2.csv”.
     For more information about SSMS or to download, visit: [SSMS](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)
 
 2.	Click “Connect” -> “Database Engine…”
-</br><img src="./Pictures/pbi24.png" width="300">
+</br><img src="./Pictures/pbi25.png" width="300">
 
     a.	Under “Server name” -> Enter the server name of server created in Task 2
     
@@ -448,7 +449,7 @@ In the “Object Explorer” pane, under
 
 </br>
 the two tables created in Task 3 should appear.
-</br><img src="./Pictures/pbi25.png" width="250">
+</br><img src="./Pictures/pbi26.png" width="250">
 
 3.	Right click one of the two tables and click “Select Top 100 Rows”. 
     Under “Results”, data should now be populated in the selected table from the CSV file.
