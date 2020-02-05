@@ -1,2 +1,458 @@
-# PowerBIPremium-IncrementalRefresh
+##  Introduction
+
+In this article, we will explore how to implement incremental refresh to a Power BI Premium tabular model.
+</br>
+</br>
+
+### What is incremental refresh?
+Incremental refresh enables very large datasets in the Power BI Premium service with the following benefits:
+
+	* Refreshes are faster - Only data that has changed needs to be refreshed. For example, refresh only the last five days of a ten-year dataset.
+
+	* Refreshes are more reliable - It's no longer necessary to maintain long-running connections to volatile source systems.
+
+	* Resource consumption is reduced - Less data to refresh reduces overall consumption of memory and other resources.
+
+Essentially, setting up the incremental refresh in Power BI means loading only part of the data on a regular basis, and storing the consistent data. This process will make your refresh time much faster!
+
+**Note:** A limitation of incremental refresh in Power BI is that after setup, you cannot download the PBIX file from the service anymore, because the data is now partitioned.
+</br>
+</br>
+
+### What technologies are used?
+* **Azure SQL Data Warehouse** (To store structured data)
+
+    * A data warehouse is designed to take data from multiple systems, prepare the data for a specific reporting purpose and house and structure the data, ready for querying
+    
+    * Designed for business intelligence and analytics
+    
+    * Data is first prepared and then stored in relation tables. This reduces storage costs, and improves query performance
+    
+    **Note:** Azure SQL Data Warehouse will soon be replaced by [Azure Synapse](https://docs.microsoft.com/en-us/azure/sql-data-warehouse/sql-data-warehouse-overview-what-is)
+</br>
+
+* **Azure Blob Storage** (To store raw data files)
+    * Azure Blob storage is Microsoft's object storage solution for the cloud.
+    
+    * Blob storage is optimized for storing massive amounts of unstructured data.
+    
+    * Blob storage offers three types of resources:
+    </br><img src="./Pictures/aas0_1.png" width="300">
+</br>
  
+* **Azure Data Factory** (To ingest data from raw file to Azure SQL Data Warehouse)
+
+    * A hybrid data integration service which makes connecting and moving data easy
+    
+    * Used for loading data in to Azure Data Lake or SQL Data Warehouse
+    
+    * Can schedule data copies from on-premises to the cloud
+</br>
+
+* **SQL Server Management Studio** (To connect to Azure SQL Data Warehouse and Azure Analysis Services)
+
+    * Integrated environment for managing any SQL infrastructure, from SQL Server to Azure SQL Database
+    
+    * Provides tools to configure, monitor, and administer instances of SQL Server and databases
+    
+    * Use SSMS to query, design, and manage your databases and data warehouses
+</br>
+
+* **Power BI Desktop** (To create tabular model, implement incremental refresh and publish to Power BI Premium)
+
+	* A business analytics solution that lets you visualize your data and share insights across your organization, or embed them in your app or website.
+</br>
+
+* **Power BI Premium** (To store tabular models with incremental refresh in Power BI Service)
+
+	* Provides dedicated and enhanced resources to run the Power BI service for your organization
+	
+	* With Power BI Premium, you get dedicated capacities. In contrast to a shared capacity where workloads run on computational resources shared with other customers, a dedicated capacity is for exclusive use by an organization. It's isolated with dedicated computational resources, which provide dependable and consistent performance for hosted content.
+
+##  Task 1: Download Sample Data
+
+
+1.  Navigate to: [Sample Data](https://github.com/matthewrodin/AzureAnalysisServices-SlidingWindowPartitioning/tree/master/Sample%20Data)
+
+2.  Download “SampleCustomerData.csv” and “SampleSalesData.csv” to a local machine
+</br>
+
+##  Task 2: Create Azure SQL Data Warehouse
+
+1.  Navigate to: [Azure Portal](https://portal.azure.com/)
+
+2.  In the search bar, type “sql” and select “SQL data warehouses
+</br><img src="./Pictures/pbi1.png" width="400">
+
+3.  On the top left, click “+ Add”
+</br><img src="./Pictures/pbi2.png" width="400">
+
+    a.  Under “Subscription” -> Select existing Azure subscription 
+    
+    b.  Under “Resource group” -> Click “Create New” -> Enter a name for the resource group
+    
+    c.  Under “Data Warehouse name” -> Enter a name for the data warehouse
+    
+    d.  Under “Server” -> Click “Create New” 
+    
+        i.   Under “Server Name” -> Enter a unique name for the server
+        
+        ii.  Under “Server Admin Login” -> Create a username for the server
+        
+        iii. Under “Password” -> Create a password for the server
+
+		iv.  Under “Location” -> Select “Canada Central”
+
+		v.   Tick “Allow Azure services to access server”
+
+		vi.  Click “OK”
+
+	e. Under “Performance Level”, select “Select performance level”
+
+		i.   Click “Gen2”
+
+		ii.  Scale the data warehouse. For reference, the service levels range from DW100c to DW30000c. 
+
+		iii. Click “Apply”
+        
+    f. On the bottom left, click the blue “Review + Create” button
+    
+    g.  On the bottom left, click the blue “Create” button
+    
+</br>
+Deployment may take up to 20 minutes.
+</br>
+</br>
+
+##  Task 3: Prepare SQL Data Warehouse for Data Ingestion
+1. Open **Command Prompt** (Run as Administator)
+
+
+2. Run the following command:
+`sqlcmd -S <servername> -d <databasename> -U <serverusername> -P <serverpassword> -I`
+**Note:** The ServerName can be found in the “Overview” window of the SQL Data Warehouse resource in the Azure portal.
+3. If the following error is received: *“Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Cannot open server…”*
+    
+	a.	Copy the IP address provided in the error message
+
+	b.	Navigate to portal.azure.com
+
+	c.	In the search bar, type “sql server” and select “SQL servers”
+    </br><img src="./Pictures/pbi3.png" width="400">
+
+	d.	Select the server created in Task 2
+
+	e.	Select “Firewalls and virtual networks”
+    </br><img src="./Pictures/pbi4.png" width="200">
+    
+        i.   Under “Allow Azure services and resources to access this server” -> Click “On”
+        
+        ii.  Under Rule Name -> “Rule1”
+        
+        iii. Under Start IP -> Paste the copied IP Address
+        
+        iv.  Under End IP -> Paste the copied IP Address
+    </br><img src="./Pictures/pbi5.png" width="400">
+    
+    f.	Click “Save”
+
+4.	“1>” should now appear.
+
+5.	Run the following script:
+    ```sql
+    CREATE TABLE [dbo].[DimCustomer](
+        [CustomerKey] [int] NOT NULL,
+        [AddressLine1] [varchar](500) NULL,
+        [CommuteDistance] [varchar](500) NULL,
+        [EmailAddress] [varchar](500) NULL,
+        [FirstName] [varchar](500) NULL,
+        [LastName] [varchar](500) NULL,
+        [Gender] [varchar](500) NULL,
+        [Phone] [varchar](500) NULL,
+        [YearlyIncome] [varchar](500) NULL,
+        [MaritalStatus] [varchar](500) NULL,
+        [GeographyKey] [int] NULL,
+        [EnglishEducation] [varchar](500) NULL,
+        [EnglishOccupation] [varchar](500) NULL,
+        [TotalChildren] [int] NULL);
+    GO
+
+    ```
+
+6.	Run the following script:
+    
+    ```sql
+    CREATE TABLE [dbo].[FactSales](
+        [CustomerKey] [int] NOT NULL,
+        [ProductKey] [int] NOT NULL,
+        [CurrencyKey] [int] NOT NULL,
+        [SalesOrderNumber] [varchar](500) NOT NULL,
+        [SalesTerritoryKey] [int] NOT NULL,
+        [TaxAmt] [varchar](500) NOT NULL,
+        [Freight] [varchar](500) NOT NULL,
+        [SalesAmount] [varchar](500) NOT NULL,
+        [Year] [int] NOT NULL,
+        [Month] [int] NOT NULL,
+        [Day] [int] NOT NULL)
+    GO
+
+    ```
+
+</br>
+
+##  Task 4: Create a Storage Account
+
+1.	Navigate to [Azure Portal](https://portal.azure.com/)
+
+2.	In the search bar, type “storage” and select “Storage accounts”
+</br><img src="./Pictures/pbi6.png" width="250">
+
+3.	Click “+ Add”
+</br><img src="./Pictures/pbi7.png" width="250">
+
+    a.	Under “Subscription” -> Select existing Azure subscription
+    
+    b.	Under “Resource group” Select the resource group created in Task 2
+    
+    c.	Under “Storage account name” -> Enter a name for the storage account
+    
+    d.	Under “Location” -> Select “Canada Central”
+    
+    e.	Under “Performance” -> Select “Standard”
+
+    f.	Under “Account kind” -> Select “StorageV2 (general purpose v2)”
+
+    g.	Under “Replication” -> Select “Locally-redundant storage (LRS)”
+    
+    h.	Under “Access tier (default)” -> Select “Cool”
+    
+    i.	On the bottom left, click the blue “Review + Create” button
+    
+    j.	On the bottom left, click the blue “Create” button
+    
+</br>Deployment may take a minute.
+</br>
+</br>
+
+4.	Click “Go to Resource”
+
+5.	Under “Blob service” -> Click “Containers”
+</br><img src="./Pictures/pbi8.png" width="200">
+
+6.	Click “+ Container”
+</br><img src="./Pictures/pbi9.png" width="350">
+
+    a.	Under “Name” -> Enter a name for the container
+    
+    b.	Under “Public access level” -> Select “Blob (anonymous read access for blobs only)”
+    
+7.	Select “Storage Explorer”
+</br><img src="./Pictures/pbi10.png" width="200">
+
+8.	Click on “BLOB CONTAINERS”
+</br><img src="./Pictures/pbi11.png" width="250">
+
+9.	Click on the container that was just created
+
+10.	Click “Upload”
+</br><img src="./Pictures/pbi12.png" width="400">
+
+11.	Click the blue browse button and upload the local copies of “SampleCustomerData.csv” and “SampleSalesData.csv” to the container. 
+</br><img src="./Pictures/pbi13.png" width="300">
+
+12.	Leave “Overwrite if files already exist” blank
+
+13.	Click "Upload"
+
+</br>
+
+##  Task 5: Create a Data Factory
+
+1.	Navigate to [Azure Portal](https://portal.azure.com/)
+
+2.	In the search bar, type “data factory” and select “SQL data warehouses”
+</br><img src="./Pictures/pbi14.png" width="200">
+
+3.	Click “+ Add”
+</br><img src="./Pictures/pbi15.png" width="300">
+
+    a.	Under “Name” -> Enter a name for the data factory
+    
+    b.	Under “Version” -> Select “V2”
+    
+    c.	Under Subscription” -> Select existing Azure subscription
+    
+    d.	Under “Resource Group” -> Select the resource group created in Task 2
+    
+    e.	Under “Location” -> Select “Canada Central”
+    
+    f.	Untick “Enable Git”
+    
+    g.	Click “Create”
+
+</br>
+
+##  Task 6: Create a Data Factory Pipeline
+
+1.	Navigate to [Azure Data Factory](https://adf.azure.com/)
+
+2.	Under “Azure Active Directory” -> Select existing Azure AD
+
+3.	Under “Subscription” -> Select existing Azure subscription
+
+4.	Under Data Factory name -> Select the Data Factory created in Task 5
+
+5.	Click “Continue”
+
+6.	Click the Home icon
+</br><img src="./Pictures/pbi16.png" width="250">
+
+7.	Click “Copy data”
+</br><img src="./Pictures/pbi17.png" width="400">
+
+8.	Under “Properties”
+
+    a.	Under “Task Name” -> Enter a name for the task
+    
+    b.	Under “Task cadence or task schedule” -> Select “Run once now”
+    
+    c.	Click “Next”
+    
+9.	Under “Source”
+
+    a.	Select “Azure”
+    
+    b.	Select “+ Create new connection”
+    </br><img src="./Pictures/pbi18.png" width="400">
+    
+    c.	Select “Azure Blob Storage”
+    
+    d.	Click “Continue"
+    </br><img src="./Pictures/pbi19.png" width="400">
+    
+    e.	Under “Name” -> Enter a name for the connection
+    
+        i.   Under “Account selection method” -> Select “From Azure Subscription”
+        
+        ii.  Under “Azure subscription” -> Select existing Azure subscription
+        
+        iii. Under “Storage account name” -> Select the storage account created in Task 4
+        
+        Note: Leave all other fields as the default
+        
+        v.   Click “Create”
+        
+    f.	Click “Next”
+    
+    g.	Under “File or folder” -> Click “Browse”
+    
+    h.	Double click the container created in Task 4
+    
+    i.	Select “SampleCustomerData2.csv”
+    
+    j.	Click “Choose”
+    
+    k.	Note: Keep all other fields as the default
+    
+    l.	Click “Next”
+    
+    m.	Verify the schema under “Preview” and click “Next”
+
+10.	Under “Destination”
+
+    a.	Click “Azure”
+
+    b.	Click “Create new connection”
+    
+    c.	Select “Azure Synapse Analytics (formerly SQL DW)”
+
+    d.	Click “Continue”
+    </br><img src="./Pictures/pbi20.png" width="400">
+    
+    e.	Under “Name” -> Enter a name for the connection
+    
+        i.    Under “Account selection method” -> Select “From Azure Subscription”
+        
+        ii.   Under “Azure subscription” -> Select existing Azure subscription
+        
+        iii.  Under “Server name” -> Select the server created in Step 2
+        
+        iv.   Under “Database name” -> Select the storage account created in Step 4
+        
+        v.    Under “Authentication type” -> Select “SQL authentication”
+        
+        vi.   Under “User name” -> Enter the username of the server created in Task 2
+        
+        vii.  Under “Password -> Enter the username of the server created in Task 2
+        
+        Note: Leave all other fields as the default
+        
+        ix.   Click “Create”
+        
+    f.	Click “Next”
+    
+    g.	In the dropdown, select “dbo.DimCustomer”
+    </br><img src="./Pictures/pbi21.png" width="450">
+    
+    h.	Click “Next”
+    
+    i.	Alter the source types in order to match the destination. The column mapping should look like this:
+    </br><img src="./Pictures/pbi22.png" width="550">
+    
+    j.	Click “Next”
+    
+11.	Under “Settings”
+
+    a.	Under “Staging account linked service” -> Select the connection created in Task 6 (Step 9e)
+    
+    b.	Click “Next”
+
+12.	Under “Summary”, verify the summary appropriately summarizes the intended pipeline and click “Next”
+
+13.	Under “Deployment”, verify that the deployment was successful and click “Finish”
+
+</br>
+Repeat Steps 1 to 13 of Task 6 for “SampleSalesData2.csv”.
+
+* In Step 10g, select “dbo.FactSales”
+
+* In Step 10i, the mapping should match the following:
+</br><img src="./Pictures/pbi23.png" width="550">
+
+</br>
+
+##  Task 7: Verify Data Ingestion
+
+1.	Open **Microsoft SQL Server Management Studio**
+
+    For more information about SSMS or to download, visit: [SSMS](https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15)
+
+2.	Click “Connect” -> “Database Engine…”
+</br><img src="./Pictures/pbi24.png" width="300">
+
+    a.	Under “Server name” -> Enter the server name of server created in Task 2
+    
+    b.	Under “Authentication” -> Select “SQL Server Authentication”
+    
+    c.	Under “Login” -> Enter the username of the server created in Task 2
+    
+    d.	Under “Password” -> Enter the password of the server created in Task 2.
+    
+    e.	Click “Connect”
+
+</br>
+In the “Object Explorer” pane, under 
+</br>
+
+*ServerName.database.windows.net -> "Databases" -> SQLDataWarehouseName -> "Tables"*
+
+</br>
+the two tables created in Task 3 should appear.
+</br><img src="./Pictures/pbi25.png" width="250">
+
+3.	Right click one of the two tables and click “Select Top 100 Rows”. 
+    Under “Results”, data should now be populated in the selected table from the CSV file.
+
+4.	Repeat Step 8 for the other table
+
+</br>
