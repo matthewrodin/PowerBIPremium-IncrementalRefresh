@@ -444,6 +444,7 @@ Repeat Steps 1 to 13 of Task 6 for “SampleSalesData2.csv”.
 </br>
 In the “Object Explorer” pane, under 
 
+
 *ServerName.database.windows.net -> "Databases" -> SQLDataWarehouseName -> "Tables"*
 
 the two tables created in Task 3 should appear.
