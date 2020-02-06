@@ -513,14 +513,14 @@ On the right, the two tables should now be visible:
 </br><img src="./Pictures/pbi33.png" width="150">
 
 9.	Click the “Model” icon
-</br><img src="./Pictures/pbi34.png" width="150">
+</br><img src="./Pictures/pbi34.png" width="100">
 
 	**Note:** Power BI should have predicted the intended model relationship as a 1-to-many between the two imported tables.
 	If this is not the case, click and drag the “CustomerKey” column from the “DimCustomer” table onto the “CustomerKey” column of the “FactSales” table and release the mouse.
 	</br><img src="./Pictures/pbi35.png" width="350">
 
 10.	In order to create a report/dashboard with visualizations, return to the “report” view of Power BI.
-</br><img src="./Pictures/pbi36.png" width="150">
+</br><img src="./Pictures/pbi36.png" width="100">
 
 11.	Save the Power BI file (.pbix)
 
@@ -533,7 +533,7 @@ On the right, the two tables should now be visible:
 1.	Open the Power BI file created in Task 9 in Power BI Desktop
 
 2.	Under “File”, click “Options and settings” and then click “Options”
-</br><img src="./Pictures/pbi37.png" width="350">
+</br><img src="./Pictures/pbi37.png" width="250">
 
 3.	Under “Preview features”, ensure that “Incremental Refresh Policies” is ticked.
 </br><img src="./Pictures/pbi38.png" width="400">
@@ -547,7 +547,7 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 1.	Open the Power BI file created in Task 9 in Power BI Desktop
 
 2.	Click “Edit Queries” to open Power Query Editor
-</br><img src="./Pictures/pbi39.png" width="350">
+</br><img src="./Pictures/pbi39.png" width="300">
 
 3.	Click “Manage Parameters”
 </br><img src="./Pictures/pbi40.png" width="350">
@@ -576,7 +576,7 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 1.	While still inside the Power Query Editor from Task 10, Step 2, click the Open the Power BI file created in Task 9 in Power BI Desktop
 
 2.	Click on the “FactSales” table
-</br><img src="./Pictures/pbi44.png" width="350">
+</br><img src="./Pictures/pbi44.png" width="250">
 
 3.	Hold the Ctrl key on the keyboard and this the “Year”, “Month” and “Day” columns. Release the Ctrl key. 
 
@@ -677,7 +677,7 @@ A “Success” notification should now be visible
 	</br><img src="./Pictures/pbi59.png" width="150">
 
 	e.	Click “Edit credentials”
-	</br><img src="./Pictures/pbi60.png" width="500">
+	</br><img src="./Pictures/pbi60.png" width="400">
 
 		i.   Under “Authentication method”, choose “Basic”
 
