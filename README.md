@@ -386,7 +386,7 @@ Deployment may take up to 20 minutes.
         
         vii.  Under “Password -> Enter the username of the server created in Task 2
         
-        **Note:** Leave all other fields as the default
+        Note: Leave all other fields as the default
         
         ix.   Click “Create”
         
