@@ -75,7 +75,7 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
 
 1.  Navigate to: [Sample Data](https://github.com/matthewrodin/AzureAnalysisServices-SlidingWindowPartitioning/tree/master/Sample%20Data)
 
-2.  Download “SampleCustomerData.csv” and “SampleSalesData.csv” to a local machine
+2.  Download “SampleCustomerData2.csv” and “SampleSalesData2.csv” to a local machine
 </br>
 
 ##  Task 2: Create Azure SQL Data Warehouse
@@ -697,7 +697,7 @@ A “Success” notification should now be visible
 
 * [Incremental Refresh with Power BI](https://docs.microsoft.com/en-us/power-bi/service-premium-incremental-refresh)
 
-* [Christian Wade (Power BI Program Manager at Microsoft) Discusses Incremental Refresh in Power BI Premium](https://www.youtube.com/watch?v=CajQjq70Kpg)
+* [Christian Wade (Power BI Program Manager at Microsoft) Discusses Incremental Refresh](https://www.youtube.com/watch?v=CajQjq70Kpg)
 
 
 
