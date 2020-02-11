@@ -258,7 +258,7 @@ Deployment may take up to 20 minutes.
 10.	Click “Upload”
 </br><img src="./Pictures/pbi13.png" width="400">
 
-11.	Click the blue browse button and upload the local copies of “SampleCustomerData.csv” and “SampleSalesData.csv” to the container. 
+11.	Click the blue browse button and upload the local copies of “SampleCustomerData2.csv” and “SampleSalesData2.csv” to the container. 
 </br><img src="./Pictures/pbi14.png" width="300">
 
 12.	Leave “Overwrite if files already exist” blank
