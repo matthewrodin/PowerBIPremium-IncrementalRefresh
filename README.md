@@ -540,6 +540,7 @@ On the right, the two tables should now be visible:
 
 4.	Click “Ok”
 </br>
+
 ### Part 2: Create Parameters
 
 For incremental refresh, datasets are filtered by using Power Query date/time parameters with the reserved, case-sensitive names **RangeStart** and **RangeEnd**. These parameters are used to filter the data imported into Power BI Desktop, and also to dynamically partition the data into ranges once published to the Power BI service. __The parameter values are substituted by the service to filter for each partition. There's no need to set them in dataset settings in the service.__ Once published, the parameter values are overridden automatically by the Power BI service.
