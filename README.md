@@ -539,7 +539,7 @@ On the right, the two tables should now be visible:
 </br><img src="./Pictures/pbi38.png" width="400">
 
 4.	Click “Ok”
-
+</br>
 ### Part 2: Create Parameters
 
 For incremental refresh, datasets are filtered by using Power Query date/time parameters with the reserved, case-sensitive names **RangeStart** and **RangeEnd**. These parameters are used to filter the data imported into Power BI Desktop, and also to dynamically partition the data into ranges once published to the Power BI service. __The parameter values are substituted by the service to filter for each partition. There's no need to set them in dataset settings in the service.__ Once published, the parameter values are overridden automatically by the Power BI service.
@@ -570,7 +570,7 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 
 5.	Repeat Step 4 for the “RangeStart” parameter and by changing the “Current Value” with the 1st of last month
 </br><img src="./Pictures/pbi43.png" width="350">
-
+</br>
 ### Part 3: Apply Filter
 
 1.	While still inside the Power Query Editor from Task 10, Step 2, click the Open the Power BI file created in Task 9 in Power BI Desktop
@@ -607,7 +607,7 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 
 11.	Click “Close & Apply”
 </br><img src="./Pictures/pbi50.png" width="250">
-
+</br>
 ### Part 4: Define Incremental Refresh Policy
 
 1.	Open the Power BI file created in Task 9 in Power BI Desktop
