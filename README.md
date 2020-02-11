@@ -73,7 +73,7 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
 ##  Task 1: Download Sample Data
 
 
-1.  Navigate to: [Sample Data](https://github.com/matthewrodin/AzureAnalysisServices-SlidingWindowPartitioning/tree/master/Sample%20Data)
+1.  Navigate to: [Sample Data](https://github.com/matthewrodin/PowerBIPremium-IncrementalRefresh/tree/master/Sample%20Data)
 
 2.  Download “SampleCustomerData2.csv” and “SampleSalesData2.csv” to a local machine
 </br>
