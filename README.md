@@ -5,15 +5,17 @@ In this article, we will explore how to implement incremental refresh to a Power
 </br>
 
 The following is a diagram of the solution we will be implementing:
-
-
+</br>
+</br><img src="./Pictures/pbi0_0.PNG" width="900">
+</br>
+</br>
 
 ### What is data warehousing?
 **Data warehousing** is the process of collecting and managing data from varied sources to provide meaningful business insights. It is typically used to connect and analyze business data from heterogeneours sources. The data warehouse is the core of the BI system, which is built for data analysis and reporting. 
 
 The following graphic shows the process of designing a data warehouse:
 </br>
-</br><img src="./Pictures/pbi0.png" width="300">
+</br><img src="./Pictures/pbi0.PNG" width="600">
 </br>
 </br>
 
@@ -33,7 +35,7 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
 </br>
 
 ### What technologies are used?
-* **Azure Synapse Analytics** - Formerly Azure SQL Data Warehouse (To store structured data)
+* **Azure Synapse Analytics** - *Formerly Azure SQL Data Warehouse* (To store structured data)
 
     * A limitless analytics service that brings together enterprise data warehousing and Big Data analytics
     
@@ -50,6 +52,7 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
     * Blob storage is optimized for storing massive amounts of unstructured data.
     
     * Blob storage offers three types of resources:
+    
     </br><img src="./Pictures/pbi1.png" width="300">
 </br>
  
@@ -91,15 +94,15 @@ Essentially, setting up the incremental refresh in Power BI means loading only p
 2.  Download “SampleCustomerData2.csv” and “SampleSalesData2.csv” to a local machine
 </br>
 
-##  Task 2: Create Azure SQL Data Warehouse
+##  Task 2: Create Azure Synapse Analytics
 
 1.  Navigate to: [Azure Portal](https://portal.azure.com/)
 
 2.  In the search bar, type “synapse” and select “Azure Synapse Analytics (formerly SQL DW)"
-</br><img src="./Pictures/pbi2_0.png" width="400">
+</br><img src="./Pictures/pbi2_0.PNG" width="400">
 
 3.  On the top left, click “+ Add”
-</br><img src="./Pictures/pbi3_0.png" width="400">
+</br><img src="./Pictures/pbi3_0.PNG" width="400">
 
     a.  Under “Subscription” -> Select existing Azure subscription 
     
@@ -636,7 +639,10 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 4.	Make sure “Incremental refresh” is turned on 
 
 **Note:** It's important the partition filters are pushed to the source system when queries are submitted for refresh operations. To push filtering down means the datasource should support query folding. Most data sources that support SQL queries support query folding. However, data sources like flat files, blobs, web, and OData feeds typically do not. In cases where the filter is not supported by the datasource back-end, it cannot be pushed down. In such cases, the mashup engine compensates and applies the filter locally, which may require retrieving the full dataset from the data source. This can cause incremental refresh to be very slow, and the process can run out of resources either in the Power BI service or in the on-premises data gateway if used.
-Given the various levels of query folding support for each datasource, it's recommended that verification is performed to ensure the filter logic is included in the source queries. To make this easier, Power BI Desktop attempts to perform this verification for you. If unable to verify, a warning is displayed in the incremental refresh dialog when defining the incremental refresh policy. SQL based data sources such as SQL, Oracle, and Teradata can rely on this warning. Other data sources may be unable to verify without tracing queries. If Power BI Desktop is unable to confirm, the following warning is displayed: </br>
+</br>
+Given the various levels of query folding support for each datasource, it's recommended that verification is performed to ensure the filter logic is included in the source queries. To make this easier, Power BI Desktop attempts to perform this verification for you. If unable to verify, a warning is displayed in the incremental refresh dialog when defining the incremental refresh policy. SQL based data sources such as SQL, Oracle, and Teradata can rely on this warning. 
+</br>
+Other data sources may be unable to verify without tracing queries. If Power BI Desktop is unable to confirm, the following warning is displayed: </br>
 </br><img src="./Pictures/pbi52.png" width="500">
 
 5.	Complete the configuration as follows:
