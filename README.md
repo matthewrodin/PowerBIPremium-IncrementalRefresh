@@ -6,7 +6,7 @@ In this article, we will explore how to implement incremental refresh to a Power
 
 The following is a diagram of the solution we will be implementing:
 </br>
-</br><img src="./Pictures/pbi0_0.PNG" width="900">
+</br><img src="./Pictures/pbi0_0.PNG" width="700">
 </br>
 </br>
 
@@ -640,7 +640,9 @@ For incremental refresh, datasets are filtered by using Power Query date/time pa
 
 **Note:** It's important the partition filters are pushed to the source system when queries are submitted for refresh operations. To push filtering down means the datasource should support query folding. Most data sources that support SQL queries support query folding. However, data sources like flat files, blobs, web, and OData feeds typically do not. In cases where the filter is not supported by the datasource back-end, it cannot be pushed down. In such cases, the mashup engine compensates and applies the filter locally, which may require retrieving the full dataset from the data source. This can cause incremental refresh to be very slow, and the process can run out of resources either in the Power BI service or in the on-premises data gateway if used.
 </br>
+</br>
 Given the various levels of query folding support for each datasource, it's recommended that verification is performed to ensure the filter logic is included in the source queries. To make this easier, Power BI Desktop attempts to perform this verification for you. If unable to verify, a warning is displayed in the incremental refresh dialog when defining the incremental refresh policy. SQL based data sources such as SQL, Oracle, and Teradata can rely on this warning. 
+</br>
 </br>
 Other data sources may be unable to verify without tracing queries. If Power BI Desktop is unable to confirm, the following warning is displayed: </br>
 </br><img src="./Pictures/pbi52.png" width="500">
