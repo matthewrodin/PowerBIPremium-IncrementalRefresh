@@ -6,7 +6,7 @@ In this article, we will explore how to implement incremental refresh to a Power
 
 The following is a diagram of the solution we will be implementing:
 </br>
-</br><img src="./Pictures/pbi0_0.PNG" width="700">
+</br><img src="./Pictures/pbi0_0.PNG" width="600">
 </br>
 </br>
 
